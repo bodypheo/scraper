@@ -6,7 +6,7 @@ CREATE TABLE urls(
     date_update DATE,
     date_launch DATE,
     last_visited DATE,
-    downloads INTEGER
+    downloads INTEGER,
     description VARCHAR,
     num_reviews INTEGER,
     rate FLOAT

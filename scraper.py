@@ -49,3 +49,7 @@ def get_app(url):
     time.sleep(2)
     print(title, "descargas:", descargas, pub_date, update_date)
     driver.quit
+
+def main():
+    url = 'https://play.google.com/store/apps'
+    get_app(url)
