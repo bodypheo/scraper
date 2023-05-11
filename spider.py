@@ -10,6 +10,7 @@ from scraper import get_app
 from scraper import is_app
 from scraper import is_category_app
 
+#Función para obtener los links de una url
 def get_links(url):
     options = Options()
     options.add_argument("--disable-extensions")
@@ -43,7 +44,7 @@ def get_links(url):
     
     driver.quit
 
-
+#Función que devuelve una url de la cola
 def get_url_from_q(file):
     
     url = ''
@@ -61,6 +62,7 @@ def get_url_from_q(file):
         exit()
     return(url)
 
+#Función para comprobar si una url está en un archivo
 def check_url_in_q(url, file):
     with open(file, 'r') as fin:
         if url in fin.read():
@@ -69,6 +71,7 @@ def check_url_in_q(url, file):
         else:
             fin.close
             return 0
+
 
 def add_url_to_q(lista_urls, file):
     print(len(lista_urls))
@@ -79,7 +82,7 @@ def add_url_to_q(lista_urls, file):
         fout.close()
 ##
 
-    #We remove items that is_not_category_app (have /apps in url)
+    #We remove items that !is_category_app (have /apps in url)
     for i in lista_urls[:]:
         if not is_category_app(i):
             lista_urls.remove(i)
@@ -106,9 +109,9 @@ def add_url_to_q(lista_urls, file):
             fichero.close()
 ####            
     
-    #TODO: check if url is in DB
+    #TODO: check if url is in DB ver si la fecha de db es superior a un mes en ese caso actualizar datos.
 
-    #Write the remaing urls that are not in the DB or in queue
+    #Write the remaining urls that are not in the DB or in queue
     with open(file, 'a') as fout:
         print(len(lista_urls))
         fout.write("\n")
