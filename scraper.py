@@ -15,6 +15,7 @@ def is_category_app(url):
 def is_app(url):
     if('store/apps/details' in url):
         return 1
+        #TODO get_links(url) Si es app y se guarda en la bd además guardamos los links en la cola
     else:
         return 0
 

@@ -14,22 +14,38 @@ from sqlalchemy import text, insert
 #7|num_reviews|INTEGER|0||0
 #8|rate|FLOAT|0||0
 
+def pruebas_db():
 
-db_uri = "sqlite:///model/urls.db"
-eng = create_engine(db_uri, echo=True)
+    db_uri = "sqlite:///model/urls.db"
+    eng = create_engine(db_uri, echo=True)
 
-sql_select = "SELECT * from urls"
-sql_insert_completo = "INSERT INTO urls (url, nombre_app, date_db, date_update, date_launch, downloads, description, num_reviews, rate) \
-                        VALUES ('https://play.google.com/store/apps/details?id=com.apalon.weatherlive', 'El tiempo', '2023-05-09', '2022-11-01', \
-                       '2022-01-10', '100000', 'App para ver el tiempo', '300', '4.4')"
+    sql_select = "SELECT * from urls"
+    sql_insert_completo = "INSERT INTO urls (url, nombre_app, date_db, date_update, date_launch, downloads, description, num_reviews, rate) \
+                            VALUES ('https://play.google.com/store/apps/details?id=com.apalon.weatherlive', 'El tiempo', '2023-05-09', '2022-11-01', \
+                        '2022-01-10', '100000', 'App para ver el tiempo', '300', '4.4')"
 
 
-with eng.begin() as conn:
-    salida = conn.execute(text(sql_select))
-    for i in salida:
-        print(i[1])
+    with eng.begin() as conn:
+        salida = conn.execute(text(sql_select))
+        for i in salida:
+            print(i[1])
+            
+        result = conn.execute(text(sql_insert_completo))
+        conn.commit                        
+
+    conn.close
+
+
+def url_in_q(url, file):
+    with open(file, 'r') as fin:
+        if url in fin.read():
+            fin.close
+            return 1
+        else:
+            fin.close
+            return 0
         
-    result = conn.execute(text(sql_insert_completo))
-    conn.commit                        
-
-conn.close
+if __name__== "__main__" :
+    url ='https://play.google.com/store/apps/details?id=com.funcamerastudio.videomaker'
+    file = 'queue_url.txt'
+    print(url_in_q(url, file))

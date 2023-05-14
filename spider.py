@@ -39,7 +39,8 @@ def get_links(url):
     for elem in elems:
         href = elem.get_attribute("href")
         if href is not None:
-            lista_url.append(href)
+            if href not in lista_url:
+                lista_url.append(href)
     return(lista_url)
     
     driver.quit
@@ -63,7 +64,7 @@ def get_url_from_q(file):
     return(url)
 
 #Función para comprobar si una url está en un archivo
-def check_url_in_q(url, file):
+def url_in_q(url, file):
     with open(file, 'r') as fin:
         if url in fin.read():
             fin.close
@@ -93,13 +94,11 @@ def add_url_to_q(lista_urls, file):
         fout.write('\n'.join(lista_urls))
         fout.close()
 ##
-    
-    lista_urls.append("https://play.google.com/store/apps/") # Añado está línea para comprobar que la quita de la lista antes de añadirla. Pa borrar
-
+   
     #Check if url is in the queue
     for i in lista_urls:
         print(i)
-        if check_url_in_q(i, file):
+        if url_in_q(i, file):
             print("Eliminada de la lista:", i)
             lista_urls.remove(i)                   #url removed because is in the queue
 
@@ -122,11 +121,9 @@ def main():
     #Todo: Poner while
     file = 'queue_url.txt'
     url = get_url_from_q(file)
-    lista_urls = []
     print("Visitamos:", url)
     if is_app(url):
-        print('check db')
-        
+        print('check db')      
     elif is_category_app(url):
         links = get_links(url)
         #If the url is in the links received we remove it
@@ -137,4 +134,5 @@ def main():
         add_url_to_q(links,file)
 
 if __name__== "__main__" :
-    main()
+    while(True):
+        main()
