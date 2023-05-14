@@ -21,11 +21,11 @@ sql_insert_completo = "INSERT INTO urls (url, nombre_app, date_db, date_update, 
                         VALUES ('https://play.google.com/store/apps/details?id=com.apalon.weatherlive', 'El tiempo', '2023-05-09', '2022-11-01', \
                        '2022-01-10', '100000', 'App para ver el tiempo', '300', '4.4')"
 
-def insertUrlIntoDb(url):
+def insertAppIntoDb(app):
     sql_insert_completo = "INSERT INTO urls (url, nombre_app, date_db, date_update, date_launch, downloads, description, num_reviews, rate) \
-                        VALUES ('https://play.google.com/store/apps/details?id=com.apalon.weatherlive', 'El tiempo', '2023-05-09', '2022-11-01', \
-                       '2022-01-10', '100000', 'App para ver el tiempo', '300', '4.4')"
-
+                        VALUES (", app['url'], ",", app['nombre_app'], ",", app['date_db'], ",", app['date_launch'], \
+                       app['up_date'], app['downloads'], app['description'], app['num_reviews'], app['rate'])"
+    print(sql_insert_completo)
     with eng.begin() as conn:
         result = conn.execute(text(sql_insert_completo))
         conn.commit                        
@@ -33,12 +33,12 @@ def insertUrlIntoDb(url):
     conn.close
 
 def main():
-    url = {
+    app = {
         "url": "https://play.google.com/store/apps",
         "nombre_app": "Prueba de app",
         "date_db": "2022-10-05",
         "date_launch": "2022-10-05",
-        "date_update": "2022-10-05",
+        "up_date": "2022-10-05",
         "downloads": "",
         "description:": "Descripción",
         "num_reviews": 1000,
@@ -47,9 +47,11 @@ def main():
     with eng.begin() as conn:
         salida = conn.execute(text(sql_select))
         for i in salida:
-            print(i[1])
-            
-        result = conn.execute(text(sql_insert_completo))
+            print(i[1])  
+        #result = conn.execute(text(sql_insert_completo))
         conn.commit                        
-
+    insertAppIntoDb(app)
     conn.close
+
+if __name__== "__main__" :
+    main()
