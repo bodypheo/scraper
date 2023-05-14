@@ -9,8 +9,9 @@ import time
 from scraper import get_app
 from scraper import is_app
 from scraper import is_category_app
-
+###########
 #Función para obtener los links de una url
+###########
 def get_links(url):
     options = Options()
     options.add_argument("--disable-extensions")
@@ -19,17 +20,9 @@ def get_links(url):
     driver.get(url)
     time.sleep(2)
 
-    #title = driver.title
-    title = driver.find_element(By.TAG_NAME, "title").get_attribute('text')
-
-
     try:
         elems = driver.find_elements(By.TAG_NAME, 'a')
         print("Enlaces encontrados")
-        #driver.find_element(By.XPATH, "//button[contains(@class, 'VfPpkd-Bz112c-LgbsSe yHy1rc eT1oJ QDwDD mN1ivc VxpoF')]").click()
-        time.sleep(1)
-        #descargas = driver.find_element(By.XPATH, '//*[@id="yDmH0d"]/div[4]/div[2]/div/div/div/div/div[2]/div[3]/div[5]/div[2]').text
-        #pub_date = driver.find_element(By.XPATH, '//*[@id="yDmH0d"]/div[4]/div[2]/div/div/div/div/div[2]/div[3]/div[8]/div[2]').text
         
     except:
         print("Enlaces no encontrados")
@@ -41,11 +34,12 @@ def get_links(url):
         if href is not None:
             if href not in lista_url:
                 lista_url.append(href)
+    driver.quit()
     return(lista_url)
-    
-    driver.quit
 
+###########
 #Función que devuelve una url de la cola
+###########
 def get_url_from_q(file):
     
     url = ''
@@ -63,7 +57,9 @@ def get_url_from_q(file):
         exit()
     return(url)
 
+###########
 #Función para comprobar si una url está en un archivo
+###########
 def url_in_q(url, file):
     with open(file, 'r') as fin:
         if url in fin.read():
@@ -74,6 +70,9 @@ def url_in_q(url, file):
             return 0
 
 
+###########
+#Función para añadir una url a a l cola
+###########
 def add_url_to_q(lista_urls, file):
     print(len(lista_urls))
 
@@ -96,11 +95,14 @@ def add_url_to_q(lista_urls, file):
 ##
    
     #Check if url is in the queue
+    urls_to_remove=[]
     for i in lista_urls:
         print(i)
         if url_in_q(i, file):
             print("Eliminada de la lista:", i)
-            lista_urls.remove(i)                   #url removed because is in the queue
+            urls_to_remove.append(i)
+    for url in urls_to_remove:
+        lista_urls.remove(url)
 
 #Bloque pa borrar después de debug
     with open("urls_pa_guardar.log", 'w') as fichero: # Listado de líneas pa guardar
@@ -122,17 +124,14 @@ def main():
     file = 'queue_url.txt'
     url = get_url_from_q(file)
     print("Visitamos:", url)
+    #Si es una app, la metemos en BD y sacamos los links de la página de la APP
     if is_app(url):
+        #TODO meter en DB
         print('check db')      
+        add_url_to_q(get_links(url),file)
+    #Si es una categoría sacamos los links de la página
     elif is_category_app(url):
-        links = get_links(url)
-        #If the url is in the links received we remove it
-        #Es útil? si es una app estará en la bd en algún momento
-        #Si es categoría, siempre se van renovando las apps...
-        #if url in links:
-         #   links.remove(url)
-        add_url_to_q(links,file)
+        add_url_to_q(get_links(url),file)
 
 if __name__== "__main__" :
-    while(True):
-        main()
+    main()
