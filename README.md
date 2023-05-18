@@ -6,8 +6,8 @@ Script para descargar información de la play store.
 
 TODO:
 
-Probar gestión de la BD.
-Mejorar control de errores
+- Probar gestión de la BD
+- Mejorar control de errores
 
 
 
