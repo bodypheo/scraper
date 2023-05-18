@@ -1,8 +1,8 @@
-*Playstore scraper*
+# Playstore scraper
 
 Script para descargar información de la play store.
 
-_WiP_
+**WiP**
 
 TODO:
 
