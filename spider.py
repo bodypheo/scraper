@@ -134,4 +134,5 @@ def main():
         add_url_to_q(get_links(url),file)
 
 if __name__== "__main__" :
+    #while(True):
     main()
